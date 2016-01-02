@@ -1,0 +1,58 @@
+Web radio receiver - DLNA audio renderer
+
+Luigi Findanno 02/01/2016
+
+Hardware:
+1) Router with USB port supported by OpenWrt
+1) USB hub
+1) USB stick 1GB (only for extroot, perhaps not mandatory)
+1) USB audio card (PCM2704 tested)
+1) Arduino nano
+1) LCD 16x2 display with PCF8574 I2C expander
+2) Rotary encoder
+1) 2 pole push button (230V)
+1) LED (power on indicator)
+1) 5V Relais transistor drived
+
+Software:
+Recompile OpenWrt is needed including the following packages:
+
+stty
+usbutils
+block-mount
+kmod-fs-ext4
+kmod-usb-ohci
+kmod-usb-serial
+kmod-usb-serial-ch341
+kmod-usb-serial-ftdi
+kmod-usb-storage
+kmod-usb-storage-exstras
+kmod-sound-core
+kmod-usb-audio
+ffmpeg
+madplay
+mpd
+mpc
+upmpdcli
+avrdude
+usleep
+
+You have to configure the wifi as client (sta) so you can disable dnsmasq to save memory.
+Extroot is perhaps not mandatory but I did.
+mpd and upmpdcli configuration is needed.
+
+Arduino connections:
+
+LCD 16x2 I2C
+SDA A4
+SCL A5
+First pole of push button (active HI) D4
+Relay D5
+Volume encoder D9 D10
+Tuner encoder D11 D12
+
+Relay contacts:
+
+Common and Normally Open contacts are in serie with 230V.
+The second pole of push button is in parallel to them.
+
