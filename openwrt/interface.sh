@@ -9,7 +9,7 @@ VOLUME=60
 RADIO_COUNTER=0
 CURRENT_RADIO=1
 VOL_INC=2
-#DISPLAY_MODE="RADIO"
+DISPLAY_MODE="RADIO"
 
 loadradio ()
 {
@@ -20,7 +20,6 @@ loadradio ()
        then
            mpc add $line
            let "RADIO_COUNTER = $RADIO_COUNTER + 1"
-           usleep 20000
        fi;
    done < "/root/radiolist"
 }

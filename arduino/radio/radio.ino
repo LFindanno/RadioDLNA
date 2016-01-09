@@ -62,7 +62,7 @@ void loop() {
     inputString = "";
     stringComplete = false;
   }
-  if (((millis() - tdebounce) > 100) && (debounce == 1)){
+  if (((millis() - tdebounce) > 100) && (debounce == 1)){ // debounce mute button
     debounce=0;
   }
   writeLCD();
