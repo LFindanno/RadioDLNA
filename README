@@ -2,6 +2,11 @@ Web radio receiver - DLNA audio renderer
 
 Luigi Findanno 02/01/2016
 
+I don't designed a schematic and some explanations are not detailed
+but if you don't know (for example) how to connect a rotary encoder to Arduino,
+use the search engine you prefer. For other things you don't understand,
+use the same method.
+
 Hardware:
 1) Router with USB port supported by OpenWrt
 1) USB hub
@@ -9,13 +14,15 @@ Hardware:
 1) USB audio card (PCM2704 tested)
 1) Arduino nano
 1) LCD 16x2 display with PCF8574 I2C expander
-2) Rotary encoder
-1) 2 pole push button (230V)
+2) Rotary encoder with push button
+1) 2 pole push button (230V inside)
 1) LED (power on indicator)
 1) 5V Relais transistor drived
+Resistors for encoders (10K), push buttons (10K), power on LED (330R)
+Find the 5V and GND on the router board, take it to power on the Arduino Nano.
 
 Software:
-Recompile OpenWrt is needed including the following packages:
+Recompile OpenWrt including the following packages:
 
 stty
 usbutils
@@ -37,9 +44,10 @@ upmpdcli
 avrdude
 usleep
 
-You have to configure the wifi as client (sta) so you can disable dnsmasq to save memory.
-Extroot is perhaps not mandatory but I did.
-mpd and upmpdcli configuration is needed, see man pages.
+Flash the router.
+Configure the wifi as client (sta) and disable dnsmasq to save memory.
+Extroot is perhaps not mandatory but I did (see the OpenWrt documentation).
+mpd (media player daemon) and upmpdcli (DLNA renderer) need to be configured, see man pages.
 
 Arduino connections:
 
@@ -55,6 +63,25 @@ Tuner encoder D11 D12
 
 Relay contacts:
 
-Common and Normally Open contacts are in serie with 230V.
+Common and Normally Open contacts are in serie with 230V before the router power supply.
 The second pole of push button is in parallel to them.
+
+Other electrical connections:
+
+Insert a little switch in parallel to C and NO relay contacts. It must be ON only when you
+burn the Arduino firmware.
+
+Burning arduino firware:
+
+Remove C4 from Arduino Nano board (it is connected to reset).
+See the schematic https://www.arduino.cc/en/uploads/Main/ArduinoNano30Schematic.pdf
+Use scp to copy .hex arduino firmware on OpenWrt.
+Run flasharduino radio.hex and press the arduino reset push button.
+
+Openwrt software:
+
+There are 3 files interface.sh, display.sh and radiolist.
+Copy this 3 file in the OpenWrt root directory using scp.
+You can edit the radiolist file and add you favorite internet radios.
+Create and enable an init file to start automatically interface.sh when the boot is completed (99).
 
