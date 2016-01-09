@@ -9,6 +9,7 @@ VOLUME=60
 RADIO_COUNTER=0
 CURRENT_RADIO=1
 VOL_INC=2
+#DISPLAY_MODE="RADIO"
 
 loadradio ()
 {
@@ -19,6 +20,7 @@ loadradio ()
        then
            mpc add $line
            let "RADIO_COUNTER = $RADIO_COUNTER + 1"
+           usleep 20000
        fi;
    done < "/root/radiolist"
 }
@@ -34,18 +36,35 @@ check_DLNA ()
    fi;
 }
 
+check_MUTE ()
+{
+    DISPLAY_MODE=`cat /root/DISPLAY`
+    if [ "$DISPLAY_MODE" == "MUTE" ];
+    then
+        echo "RADIO" > /root/DISPLAY
+        mpc play
+    else
+        echo "MUTE" > /root/DISPLAY
+        mpc pause
+    fi;
+    #cat /root/DISPLAY
+}
 
 trap 'kill $! ; exit 1' SIGINT	# exit on ctrl-c, useful for debugging
 
 stty 9600 -echo -onlcr < /dev/ttyUSB0
+
+echo "RADIO" > /root/DISPLAY
 
 loadradio
 
 mpc volume $VOLUME
 
 mpc play $CURRENT_RADIO
+mpc stop                 # prevent strange behavior
+mpc play $CURRENT_RADIO
 
-/root/display.sh &
+source /root/display.sh &
 
 while true	# loop forever
 do
@@ -119,5 +138,9 @@ do
        mpc play $CURRENT_RADIO
    fi;
 
+   if [ "$cmd" == "MUTE" ]; # next radio
+   then
+       check_MUTE
+   fi;
 done
 

@@ -1,7 +1,7 @@
 #! /bin/sh -
 # Luigi Findanno 
 # Data: 22/12/2015
-# File: test.sh
+# File: display.sh
 # Description: get the information about the media played by mpd and show it on LCD.
 # It send commands to arduino by serial port every 0,8 s.
 # If the line to view is too long for the display, the line scroll automatically.
@@ -24,39 +24,57 @@ add_spaces ()
 
 set_row_spaces ()
 {
-    if [ "${#@}" -gt $LIMIT ];
-    then
-        add_spaces $@
-        set_row_spaces="$add_spaces"
-    else
-        set_row_spaces="$@"
-    fi;
+    add_spaces $@
+    set_row_spaces="$add_spaces"
 }
 
 update_info ()
 {
-    newrig1="$(echo "currentsong" | nc localhost 6600 | grep -e "^Name: ")"       # web radio
-    if [ "$newrig1" == "" ];
+    DISPLAY_MODE=`cat /root/DISPLAY`
+    if [ "$DISPLAY_MODE" == "RADIO" ];
     then
-        newrig1="$(echo "currentsong" | nc localhost 6600 | grep -e "^Artist: ")" # DLNA
-    fi;
+        newrig1="$(echo "currentsong" | nc localhost 6600 | grep -e "^Name: ")"       # web radio
+        if [ "$newrig1" == "" ];
+        then
+            newrig1="$(echo "currentsong" | nc localhost 6600 | grep -e "^Artist: ")" # DLNA
+        fi;
     newrig2="$(echo "currentsong" | nc localhost 6600 | grep -e "^Title: ")"
-    #echo "$newrig1"
-    #echo "$newrig2"
+    fi;
+
+    if [ "$DISPLAY_MODE" == "MUTE" ];
+    then
+        newrig1="      MUTE"
+        newrig2=""
+    fi;
+
+#    echo "$newrig1"
+#    echo "$newrig2"
 
     if [ "$newrig1" != "$riga1" ];
     then
         riga1="$newrig1"
-        set_row_spaces $riga1
-        rig1="$set_row_spaces"
+        if [ "${#riga1}" -gt $LIMIT ];
+        then
+            set_row_spaces $riga1
+            rig1="$set_row_spaces"
+        else
+            rig1="$riga1"
+        fi;
+        r1=0
     fi;
     if [ "$newrig2" != "$riga2" ];
     then
         riga2="$newrig2"
-        set_row_spaces $riga2
-        rig2="$set_row_spaces"
+        if [ "${#riga2}" -gt $LIMIT ];
+        then
+            set_row_spaces $riga2
+            rig2="$set_row_spaces"
+        else
+            rig2="$riga2"
+        fi;
+        r2=0
     fi;
-
+    
 }
 
 trap 'exit 1' SIGINT	# exit on ctrl-c
@@ -81,8 +99,8 @@ do
    lcd1="${rig1:$r1:16}"
    lcd2="${rig2:$r2:16}"
 
-   #echo "$lcd1"   # for debug
-   #echo "$lcd2"
+#   echo "$lcd1"   # for debug
+#   echo "$lcd2"
 
    # Send data to serial port
    echo -e "RIG1$lcd1\nRIG2$lcd2\n" > /dev/ttyUSB0;

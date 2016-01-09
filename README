@@ -39,16 +39,18 @@ usleep
 
 You have to configure the wifi as client (sta) so you can disable dnsmasq to save memory.
 Extroot is perhaps not mandatory but I did.
-mpd and upmpdcli configuration is needed.
+mpd and upmpdcli configuration is needed, see man pages.
 
 Arduino connections:
 
 LCD 16x2 I2C
 SDA A4
 SCL A5
-First pole of push button (active HI) D4
+First pole of push button  D4 (active HI)
 Relay D5
+Power on LED D5
 Volume encoder D9 D10
+Push button Volume encoder D8 (active LOW, mute function)
 Tuner encoder D11 D12
 
 Relay contacts:
