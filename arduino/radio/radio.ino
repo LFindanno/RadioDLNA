@@ -93,7 +93,7 @@ void doCommand(){
   cmd.reserve(64);
   int f;
   
-  if (inputString.length() > 24){
+  if (inputString.length() > 20){
     f = 24;
   }else{
     f = inputString.length();
