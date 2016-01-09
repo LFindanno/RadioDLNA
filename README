@@ -1,6 +1,7 @@
 Web radio receiver - DLNA audio renderer
 
 Luigi Findanno 02/01/2016
+Last update 09/01/2016
 
 I don't designed a schematic and some explanations are not detailed
 but if you don't know (for example) how to connect a rotary encoder to Arduino,
@@ -19,6 +20,8 @@ Hardware:
 1) LED (power on indicator)
 1) 5V Relais transistor drived
 Resistors for encoders (10K), push buttons (10K), power on LED (330R)
+Connect the USB stick, USB audio card and Arduino Nano to the USB hub then
+connect the USB hub to the router.
 Find the 5V and GND on the router board, take it to power on the Arduino Nano.
 
 Software:
