@@ -50,7 +50,7 @@ First pole of push button  D4 (active HI)
 Relay D5
 Power on LED D5
 Volume encoder D9 D10
-Push button Volume encoder D8 (active LOW, mute function)
+Push button Volume encoder D7 (active LOW, mute function)
 Tuner encoder D11 D12
 
 Relay contacts:
