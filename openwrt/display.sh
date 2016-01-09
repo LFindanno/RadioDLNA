@@ -33,12 +33,12 @@ update_info ()
     DISPLAY_MODE=`cat /root/DISPLAY`
     if [ "$DISPLAY_MODE" == "RADIO" ];
     then
-        newrig1="$(echo "currentsong" | nc localhost 6600 | grep -e "^Name: ")"       # web radio
+        newrig1="$(echo "currentsong" | nc localhost 6600 | grep -e "^Name: echo "currentsong" | nc localhost 6600 | grep -e "^Title: " | cut -d " " -f2-)"       # web radio
         if [ "$newrig1" == "" ];
         then
-            newrig1="$(echo "currentsong" | nc localhost 6600 | grep -e "^Artist: ")" # DLNA
+            newrig1="$(echo "currentsong" | nc localhost 6600 | grep -e "^Artist: "echo "currentsong" | nc localhost 6600 | grep -e "^Title: " | cut -d " " -f2-)" # DLNA
         fi;
-    newrig2="$(echo "currentsong" | nc localhost 6600 | grep -e "^Title: ")"
+    newrig2="$(echo "currentsong" | nc localhost 6600 | grep -e "^Title: "echo "currentsong" | nc localhost 6600 | grep -e "^Title: " | cut -d " " -f2-)"
     fi;
 
     if [ "$DISPLAY_MODE" == "MUTE" ];
