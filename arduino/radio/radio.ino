@@ -10,7 +10,7 @@
 
 #define PB_POWER 4
 #define POWER_RELE 5
-#define PB_MUTE 8
+#define PB_MUTE 7
 
 PCF8574_HD44780_I2C lcd(0x27,16,2);
 RotaryEncoder volume(10,9);
@@ -30,6 +30,8 @@ int oldVolume=0;
 int oldTuner=0;
 int v=0;
 int t=0;
+long tdebounce=0;
+int debounce=0;
 
 void setup() {
   pinMode(PB_POWER, INPUT);
@@ -59,6 +61,9 @@ void loop() {
     doCommand();
     inputString = "";
     stringComplete = false;
+  }
+  if (((millis() - tdebounce) > 100) && (debounce == 1)){
+    debounce=0;
   }
   writeLCD();
   checkPowerButton();
@@ -170,10 +175,13 @@ void checkTuner(){
 }
 
 void checkMute() {
-  if ((pbMute==1)&&(digitalRead(PB_MUTE)==0)){ // mute button pressed
-     Serial.println("MUTE");
-     delay(10);
+  if (debounce==0) {
+     if ((pbMute==1)&&(digitalRead(PB_MUTE)==0)){ // mute button pressed
+        tdebounce=millis();
+        debounce=1;
+        Serial.println("MUTE");
+     }
+     pbMute=digitalRead(PB_MUTE);
   }
-  pbMute=digitalRead(PB_MUTE);
 }
 

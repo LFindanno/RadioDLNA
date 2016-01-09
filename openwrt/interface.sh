@@ -91,6 +91,10 @@ do
            let "VOLUME = $VOLUME + $VOL_INC"
            mpc volume $VOLUME
        fi;
+       if [ `cat /root/DISPLAY` == "MUTE" ];
+       then
+           echo "RADIO" > /root/DISPLAY
+       fi;
    fi;
 
    if [ "$cmd" == "VOL-" ]; # decrement volume
@@ -100,6 +104,10 @@ do
            let "VOLUME = $VOLUME - $VOL_INC"
            mpc volume $VOLUME
        fi;
+       if [ `cat /root/DISPLAY` == "MUTE" ];
+       then
+           echo "RADIO" > /root/DISPLAY
+       fi;       
    fi;
 
    if [ "$cmd" == "TUN+" ]; # next radio
