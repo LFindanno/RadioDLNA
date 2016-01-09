@@ -1,0 +1,5 @@
+#!/bin/ash
+PORT=/dev/ttyUSB0
+echo "flasharduino Ver.0.1 Luigi Findanno 20/12/2015"
+echo "Trying to upload the $1 sketch using $PORT serial port..."
+avrdude -V -F -p atmega328 -P $PORT -c stk500v1 -b 57600 -U flash:w:$1
