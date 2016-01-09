@@ -1,0 +1,12 @@
+TODO
+
+At this moment the wifi configuration is done manually editing the following file:
+
+/etc/config/wireless
+/etc/config/network
+
+In the future version a setup push button is expected (rear panel).
+It reset the current wifi configuration and set the router as access point
+without encription.
+A web page allow to configure the wifi settings.
+
