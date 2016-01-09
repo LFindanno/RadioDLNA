@@ -63,7 +63,7 @@ mpc play $CURRENT_RADIO
 mpc stop                 # prevent strange behavior
 mpc play $CURRENT_RADIO
 
-source /root/display.sh &
+/root/display.sh &
 
 while true	# loop forever
 do
