@@ -42,10 +42,10 @@ check_MUTE ()
     if [ "$DISPLAY_MODE" == "MUTE" ];
     then
         echo "RADIO" > /root/DISPLAY
-        mpc play
+        mpc volume $VOLUME
     else
         echo "MUTE" > /root/DISPLAY
-        mpc pause
+        mpc volume 0
     fi;
     #cat /root/DISPLAY
 }
