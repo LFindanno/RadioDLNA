@@ -28,10 +28,10 @@ int posVolume=0;
 int posTuner=0;
 int oldVolume=0;
 int oldTuner=0;
-int v=0;
-int t=0;
 long tdebounce=0;
 int debounce=0;
+long tsync=0;
+int sync=0;
 
 void setup() {
   pinMode(PB_POWER, INPUT);
@@ -62,10 +62,8 @@ void loop() {
     inputString = "";
     stringComplete = false;
   }
-  if (((millis() - tdebounce) > 100) && (debounce == 1)){ // debounce mute button
-    debounce=0;
-  }
   writeLCD();
+  checkTimers();
   checkPowerButton();
   checkVolume();
   checkTuner();
@@ -154,12 +152,17 @@ void checkVolume(){
   if (posVolume > oldVolume){
     Serial.println("VOL+");
     oldVolume = posVolume;
+    sync=1;
+    tsync=millis();
   }
   if (posVolume < oldVolume){
     Serial.println("VOL-");
     oldVolume = posVolume;
+    sync=1;
+    tsync=millis();
   }
 }
+
 
 void checkTuner(){
   tuner.tick();
@@ -183,5 +186,17 @@ void checkMute() {
      }
      pbMute=digitalRead(PB_MUTE);
   }
+}
+
+void checkTimers() {
+  // mute debounce timer (300ms)
+  if (((millis() - tdebounce) > 300) && (debounce == 1)){ // debounce mute button
+    debounce=0;
+  }
+  // resync display signal (3 seconds)
+  if (((millis() - tsync) > 3000) && (sync == 1)){ // debounce mute button
+    sync=0;
+    Serial.println("SYNC");
+  }  
 }
 

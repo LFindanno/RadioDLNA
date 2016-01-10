@@ -14,7 +14,7 @@ r1=0
 r2=0
 newrig1=""
 newrig2=""
- 
+DELAY=800000
 
 add_spaces ()
 {
@@ -38,15 +38,24 @@ update_info ()
         then
             newrig1="$(echo "currentsong" | nc localhost 6600 | grep -e "^Artist: " | cut -d " " -f2-)" # DLNA
         fi;
-    newrig2="$(echo "currentsong" | nc localhost 6600 | grep -e "^Title: " | cut -d " " -f2-)"
+        newrig2="$(echo "currentsong" | nc localhost 6600 | grep -e "^Title: " | cut -d " " -f2-)"
+        DELAY=800000
     fi;
 
     if [ "$DISPLAY_MODE" == "MUTE" ];
     then
         newrig1="      MUTE"
         newrig2=""
+        DELAY=800000
     fi;
 
+    if [ "$DISPLAY_MODE" == "VOL" ];
+    then
+        VOLUME=`cat /root/PARAM`
+        newrig1="VOLUME $VOLUME"
+        newrig2=""
+        DELAY=100000
+    fi;
 #    echo "$newrig1"
 #    echo "$newrig2"
 
@@ -104,7 +113,7 @@ do
 
    # Send data to serial port
    echo -e "RIG1$lcd1\nRIG2$lcd2\n" > /dev/ttyUSB0;
-   usleep 800000
+   usleep $DELAY
 
    #echo -e "RIG1$lcd1\n" > /dev/ttyUSB0;
    #usleep 500000

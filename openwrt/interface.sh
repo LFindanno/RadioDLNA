@@ -90,10 +90,9 @@ do
            let "VOLUME = $VOLUME + $VOL_INC"
            mpc volume $VOLUME
        fi;
-       if [ `cat /root/DISPLAY` == "MUTE" ];
-       then
-           echo "RADIO" > /root/DISPLAY
-       fi;
+       let "VOL_DISPLAY = $VOLUME / 5"
+       echo "$VOL_DISPLAY" > /root/PARAM
+       echo "VOL" > /root/DISPLAY
    fi;
 
    if [ "$cmd" == "VOL-" ]; # decrement volume
@@ -103,10 +102,9 @@ do
            let "VOLUME = $VOLUME - $VOL_INC"
            mpc volume $VOLUME
        fi;
-       if [ `cat /root/DISPLAY` == "MUTE" ];
-       then
-           echo "RADIO" > /root/DISPLAY
-       fi;       
+       let "VOL_DISPLAY = $VOLUME / 5"
+       echo "$VOL_DISPLAY" > /root/PARAM
+       echo "VOL" > /root/DISPLAY
    fi;
 
    if [ "$cmd" == "TUN+" ]; # next radio
@@ -148,6 +146,12 @@ do
    if [ "$cmd" == "MUTE" ]; # next radio
    then
        check_MUTE
+   fi;
+
+   if [ "$cmd" == "SYNC" ]; # resync display infos
+   then
+#       echo "Sync display"
+       echo "RADIO" > /root/DISPLAY
    fi;
 done
 
