@@ -1,6 +1,6 @@
-Web radio receiver - DLNA audio renderer
+WIFI Web radio receiver - DLNA audio renderer
 
-Luigi Findanno 02/01/2016
+Luigi Findanno 2016
 
 I don't designed a schematic and some explanations are not detailed
 but if you don't know (for example) how to connect a rotary encoder to Arduino,
@@ -22,6 +22,33 @@ Resistors for encoders (10K), push buttons (10K), power on LED (330R)
 Connect the USB stick, USB audio card and Arduino Nano to the USB hub then
 connect the USB hub to the router.
 Find the 5V and GND on the router board, take it to power on the Arduino Nano.
+
+Arduino connections:
+LCD 16x2 I2C
+SDA A4
+SCL A5
+First pole of push button  D4 (active HI)
+Relay D5
+Power on LED D5
+Volume encoder D9 D10
+Push button Volume encoder D7 (active LOW, mute function)
+Tuner encoder D11 D12
+
+Relay contacts:
+Common and Normally Open contacts are in serie with 230V before the router power supply (as
+a main power on switch).
+The second pole of push button (NO) is in parallel to them.
+Also insert a little switch in parallel to Common and NO relay contacts. It MUST be ON ONLY when you
+burn the Arduino firmware.
+
+Other electrical connections:
+Remove C4 from Arduino Nano board (it is connected to reset).
+See the schematic https://www.arduino.cc/en/uploads/Main/ArduinoNano30Schematic.pdf
+
+Some hardware considerations:
+You can compile OpenWrt for a lot of platforms as: Raspberry PI, Cosino, Carambola and so on.
+When possible, you can use a I2S DAC for the audio output.
+Wifi connection is not mandatory, you can use a cabled ethernet connection.
 
 Software:
 Compile OpenWrt including the following packages:
@@ -49,28 +76,6 @@ usleep
 Flash the router.
 Configure the wifi as client (sta) and disable dnsmasq to save memory.
 Extroot is perhaps not mandatory but I did (see the OpenWrt documentation).
-
-Arduino connections:
-
-LCD 16x2 I2C
-SDA A4
-SCL A5
-First pole of push button  D4 (active HI)
-Relay D5
-Power on LED D5
-Volume encoder D9 D10
-Push button Volume encoder D7 (active LOW, mute function)
-Tuner encoder D11 D12
-
-Relay contacts:
-Common and Normally Open contacts are in serie with 230V before the router power supply.
-The second pole of push button is in parallel to them.
-Also insert a little switch in parallel to C and NO relay contacts. It MUST be ON only when you
-burn the Arduino firmware.
-
-Other electrical connections:
-Remove C4 from Arduino Nano board (it is connected to reset).
-See the schematic https://www.arduino.cc/en/uploads/Main/ArduinoNano30Schematic.pdf
 
 Burning Arduino firmware:
 Install the Arduino libraries RotaryEncoder and PCF8574_HD44780_I2C.
