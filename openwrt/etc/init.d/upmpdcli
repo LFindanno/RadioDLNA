@@ -1,0 +1,11 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 OpenWrt.org
+
+START=99
+start() {
+        sleep 5   # make sure boot process is done, no more console msgs
+        echo "upmpdcli Started"
+        . /etc/profile
+        echo $PATH
+        upmpdcli -D -c /etc/upmpdcli.conf
+}

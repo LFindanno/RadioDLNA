@@ -1,0 +1,6 @@
+# Put your custom commands here that should be executed once
+# the system init finished. By default this file does nothing.
+
+sleep 10
+ifconfig eth0 192.168.1.1
+exit 0
