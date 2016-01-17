@@ -1,7 +1,6 @@
 Web radio receiver - DLNA audio renderer
 
 Luigi Findanno 02/01/2016
-Last update 09/01/2016
 
 I don't designed a schematic and some explanations are not detailed
 but if you don't know (for example) how to connect a rotary encoder to Arduino,
@@ -25,7 +24,7 @@ connect the USB hub to the router.
 Find the 5V and GND on the router board, take it to power on the Arduino Nano.
 
 Software:
-Recompile OpenWrt including the following packages:
+Compile OpenWrt including the following packages:
 
 stty
 usbutils
@@ -50,7 +49,6 @@ usleep
 Flash the router.
 Configure the wifi as client (sta) and disable dnsmasq to save memory.
 Extroot is perhaps not mandatory but I did (see the OpenWrt documentation).
-mpd (media player daemon) and upmpdcli (DLNA renderer) need to be configured, see man pages.
 
 Arduino connections:
 
@@ -65,26 +63,42 @@ Push button Volume encoder D7 (active LOW, mute function)
 Tuner encoder D11 D12
 
 Relay contacts:
-
 Common and Normally Open contacts are in serie with 230V before the router power supply.
 The second pole of push button is in parallel to them.
-
-Other electrical connections:
-
-Insert a little switch in parallel to C and NO relay contacts. It must be ON only when you
+Also insert a little switch in parallel to C and NO relay contacts. It MUST be ON only when you
 burn the Arduino firmware.
 
-Burning arduino firware:
-
+Other electrical connections:
 Remove C4 from Arduino Nano board (it is connected to reset).
 See the schematic https://www.arduino.cc/en/uploads/Main/ArduinoNano30Schematic.pdf
-Use scp to copy .hex arduino firmware on OpenWrt.
-Run flasharduino radio.hex and press the arduino reset push button.
 
-Openwrt software:
+Burning Arduino firmware:
+Install the Arduino libraries RotaryEncoder and PCF8574_HD44780_I2C.
+Compile and export radio.ino with the Arduino IDE (tested on 1.6.5 version).
+Use scp to copy radio.hex arduino firmware on the OpenWrt router.
+Login into router.
+Run 
+flasharduino radio.hex 
+and press the arduino reset push button in 1 second.
 
-There are 3 files interface.sh, display.sh and radiolist.
-Copy this 3 file in the OpenWrt root directory using scp.
-You can edit the radiolist file and add you favorite internet radios.
-Create and enable an init file to start automatically interface.sh when the boot is completed (99).
+Openwrt RadioDLNA software:
 
+Create the following folder
+/root/.mpd
+/root/.mpd/playlists
+/root/music
+
+Install mpd, mpc, upmpdcli with opkd command.
+
+Copy or modify the configuration files in the path as indicated in the repository openwrt folder.
+Note: use scp to copy the files from your PC to the router and vi editor to modify the files on the router.
+Edit with your data:
+/etc/config/wireless (ssid and key) 
+/etc/config/network (gateway IP)
+
+Run the commands
+/etc/init.d/upmpdcli enable
+/etc/init.d/radio enable
+
+You can edit the /root/radiolist file and add you favorite internet radios.
+Reboot.
